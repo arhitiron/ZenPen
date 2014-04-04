@@ -4,8 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Condom extends SpritedGameObject {
 
-	public Condom(Game game, float x, float y, float width, float height) {
+	private boolean unpacked;
+	private boolean isPack;
+
+	public Condom(Game game, float x, float y, float width, float height, boolean isPack) {
 		super(game, x, y, width, height);
+		setUnpacked(false);
+		setPack(isPack);
 	}
 
 	@Override
@@ -21,5 +26,21 @@ public class Condom extends SpritedGameObject {
 	@Override
 	public void dispose() {
 
+	}
+
+	public boolean isUnpacked() {
+		return unpacked;
+	}
+
+	public void setUnpacked(boolean unpacked) {
+		this.unpacked = unpacked;
+	}
+
+	public boolean isPack() {
+		return isPack;
+	}
+
+	public void setPack(boolean isPack) {
+		this.isPack = isPack;
 	}
 }

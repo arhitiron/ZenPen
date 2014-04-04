@@ -4,14 +4,10 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -26,8 +22,7 @@ public class Game implements ApplicationListener {
 	private Array<Condom> condoms;
 	private Array<Sperm> sperms;
 	private long lastDropTime;
-	private TextureAtlas condomsTextureAtlas;
-	private TextureAtlas spermTextureAtlas;
+	private Textures textures;
 
 	@Override
 	public void create() {
@@ -44,9 +39,7 @@ public class Game implements ApplicationListener {
 	}
 
 	private void initTextures() {
-		setCondomsTextureAtlas(new TextureAtlas(Gdx.files.internal("data/condoms/condoms.atlas")));
-		setSpermTextureAtlas(new TextureAtlas(Gdx.files.internal("data/sperm/sperm.atlas")));
-		setBatch(new SpriteBatch());
+		setTextures(new Textures(this));
 	}
 
 	private void initCamera() {
@@ -67,9 +60,7 @@ public class Game implements ApplicationListener {
 	public void dispose() {
 		getPenis().dispose();
 		getSounds().dispose();
-		getBatch().dispose();
-		getCondomsTextureAtlas().dispose();
-		getSpermTextureAtlas().dispose();
+		getTextures().dispose();
 	}
 
 	@Override
@@ -161,10 +152,10 @@ public class Game implements ApplicationListener {
 
 	private void spawnRaindrop() {
 		if (TimeUtils.nanoTime() - getLastDropTime() <= 1000000000) return;
-		Condom condom = new Condom(this, MathUtils.random(0, 800 - 64), 480, 64, 64);
-		condom.setSpeed((MathUtils.random(0, 20) >= 15) ? (condom.getSpeed() * 2) : condom.getSpeed());
-		int index = MathUtils.random(1,	getCondomsTextureAtlas().getRegions().size - 1);
-		condom.getSprite().setRegion(getCondomsTextureAtlas().findRegion("condom", index));
+		Condom condom = new Condom(this, MathUtils.random(0, 800 - 64), 480, 64, 64, false);
+		condom.setSpeed((MathUtils.random(0, 20) >= 15) ? (condom.getSpeed() + condom.getSpeed()/2) : condom.getSpeed());
+		int index = MathUtils.random(1,	getTextures().getCondomsAtlas().getRegions().size - 1);
+		condom.getSprite().setRegion(getTextures().getCondomsAtlas().findRegion("condom", index));
 		getCondoms().add(condom);
 
 		setLastDropTime(TimeUtils.nanoTime());
@@ -226,27 +217,19 @@ public class Game implements ApplicationListener {
 		this.lastDropTime = lastDropTime;
 	}
 
-	public TextureAtlas getCondomsTextureAtlas() {
-		return condomsTextureAtlas;
-	}
-
-	public void setCondomsTextureAtlas(TextureAtlas condomsTextureAtlas) {
-		this.condomsTextureAtlas = condomsTextureAtlas;
-	}
-
-	public TextureAtlas getSpermTextureAtlas() {
-		return spermTextureAtlas;
-	}
-
-	public void setSpermTextureAtlas(TextureAtlas spermTextureAtlas) {
-		this.spermTextureAtlas = spermTextureAtlas;
-	}
-
 	public Sounds getSounds() {
 		return sounds;
 	}
 
 	public void setSounds(Sounds sounds) {
 		this.sounds = sounds;
+	}
+
+	public Textures getTextures() {
+		return textures;
+	}
+
+	public void setTextures(Textures textures) {
+		this.textures = textures;
 	}
 }

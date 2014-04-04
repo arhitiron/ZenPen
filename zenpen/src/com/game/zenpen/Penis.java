@@ -34,7 +34,7 @@ public class Penis extends TexturedGameObject {
 //		sperm.box.height = 32;
 //		sperm.box.x = getPosition().x + getBounds().width/2 - 32/2;
 //		sperm.box.y = getPosition().y + getBounds().height - 32/2;
-		sperm.getSprite().setRegion(getGame().getSpermTextureAtlas().findRegion("sperm", sperm.getCurrentSpriteIndex()));
+		sperm.getSprite().setRegion(getGame().getTextures().getSpermsAtlas().findRegion("sperm", sperm.getCurrentSpriteIndex()));
 		Timer.schedule(new Task(){
             @Override
             public void run() {
@@ -42,7 +42,7 @@ public class Penis extends TexturedGameObject {
                 if(sperm.getCurrentSpriteIndex() > 4)
                 	sperm.setCurrentSpriteIndex(1);
 
-                sperm.getSprite().setRegion(getGame().getSpermTextureAtlas().findRegion("sperm", sperm.getCurrentSpriteIndex()));
+                sperm.getSprite().setRegion(getGame().getTextures().getSpermsAtlas().findRegion("sperm", sperm.getCurrentSpriteIndex()));
             }
         }
         , 0, 1/25.0f);
