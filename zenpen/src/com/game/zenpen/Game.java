@@ -31,7 +31,7 @@ public class Game implements ApplicationListener {
 		initCamera();
 		initCollections();
 		initPenis();
-		spawnRaindrop();
+		spawnCondom();
 	}
 
 	private void initPenis() {
@@ -82,7 +82,7 @@ public class Game implements ApplicationListener {
 
 		getPenis().update();
 
-		spawnRaindrop();
+		spawnCondom();
 
 		updateCondoms();
 		updateSperms();
@@ -92,7 +92,9 @@ public class Game implements ApplicationListener {
 		Iterator<Sperm> spermIter = getSperms().iterator();
 		while (spermIter.hasNext()) {
 			Sperm sperm = spermIter.next();
-			sperm.getBounds().y += sperm.getSpeed() * Gdx.graphics.getDeltaTime();
+
+			sperm.update();
+
 			if (sperm.getBounds().y + sperm.getBounds().height > 800) {
 				spermIter.remove();
 				continue;
@@ -104,30 +106,55 @@ public class Game implements ApplicationListener {
 		Iterator<Condom> iter = getCondoms().iterator();
 		while (iter.hasNext()) {
 			Condom condom = iter.next();
-			condom.getBounds().y -= condom.getSpeed() * Gdx.graphics.getDeltaTime();
-			if (condom.getBounds().y + condom.getBounds().height < 0) {
-				iter.remove();
-				continue;
-			}
-			Iterator<Sperm> spermIter = getSperms().iterator();
-			while (spermIter.hasNext()) {
-				Sperm sperm = spermIter.next();
-				if (sperm.getBounds().overlaps(condom.getBounds())) {
-					getSounds().getCatchSound().play();
-					if (Gdx.input.isPeripheralAvailable(Peripheral.Vibrator)) {
-						Gdx.input.vibrate(60);
-					}
-					spermIter.remove();
+			condom.update();
+
+			if (condom.isPack() && condom.isUnpacked()) {
+				if (condom.getBounds().y + condom.getBounds().height > 480) {
+					iter.remove();
+					continue;
+				}
+			} else {
+				if (condom.getBounds().y + condom.getBounds().height < 0) {
 					iter.remove();
 					continue;
 				}
 			}
-			if (condom.getBounds().overlaps(getPenis().getBounds())) {
-				getSounds().getCatchSound().play();
-				if (Gdx.input.isPeripheralAvailable(Peripheral.Vibrator)) {
-					Gdx.input.vibrate(60);
+
+			Iterator<Sperm> spermIter = getSperms().iterator();
+			while (spermIter.hasNext()) {
+				Sperm sperm = spermIter.next();
+				if (sperm.getBounds().overlaps(condom.getBounds())) {
+					if (!condom.isUnpacked()) {
+						if (!condom.isPack()) {
+							getSounds().getCatchSound().play();
+							if (Gdx.input.isPeripheralAvailable(Peripheral.Vibrator)) {
+								Gdx.input.vibrate(60);
+							}
+							iter.remove();
+						} else {
+							condom.setUnpacked(true);
+						}
+						spermIter.remove();
+						continue;
+					} else if (condom.isUnpacked() && !condom.isFly()) {
+						condom.setFly(true);
+						getSounds().getCatchSound().play();
+						if (Gdx.input.isPeripheralAvailable(Peripheral.Vibrator)) {
+							Gdx.input.vibrate(60);
+						}
+						spermIter.remove();
+						continue;
+					}
 				}
-				iter.remove();
+			}
+			if (condom.getBounds().overlaps(getPenis().getBounds())) {
+				if (!condom.isUnpacked()) {
+					getSounds().getCatchSound().play();
+					if (Gdx.input.isPeripheralAvailable(Peripheral.Vibrator)) {
+						Gdx.input.vibrate(60);
+					}
+					iter.remove();
+				}
 			}
 
 		}
@@ -150,12 +177,19 @@ public class Game implements ApplicationListener {
 	public void resume() {
 	}
 
-	private void spawnRaindrop() {
+	private void spawnCondom() {
 		if (TimeUtils.nanoTime() - getLastDropTime() <= 1000000000) return;
+
 		Condom condom = new Condom(this, MathUtils.random(0, 800 - 64), 480, 64, 64, false);
 		condom.setSpeed((MathUtils.random(0, 20) >= 15) ? (condom.getSpeed() + condom.getSpeed()/2) : condom.getSpeed());
+
 		int index = MathUtils.random(1,	getTextures().getCondomsAtlas().getRegions().size - 1);
 		condom.getSprite().setRegion(getTextures().getCondomsAtlas().findRegion("condom", index));
+
+		if (index > getTextures().getCondomsAtlas().getRegions().size-4 && index < getTextures().getCondomsAtlas().getRegions().size) {
+			condom.setPack(true);
+		}
+
 		getCondoms().add(condom);
 
 		setLastDropTime(TimeUtils.nanoTime());

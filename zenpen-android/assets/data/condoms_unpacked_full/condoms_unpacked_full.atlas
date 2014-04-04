@@ -1,0 +1,26 @@
+
+condoms_unpacked_full.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+condom_unpacked_full
+  rotate: false
+  xy: 2, 2
+  size: 64, 241
+  orig: 64, 241
+  offset: 0, 0
+  index: 1
+condom_unpacked_full
+  rotate: false
+  xy: 68, 2
+  size: 64, 241
+  orig: 64, 241
+  offset: 0, 0
+  index: 2
+condom_unpacked_full
+  rotate: false
+  xy: 134, 2
+  size: 64, 241
+  orig: 64, 241
+  offset: 0, 0
+  index: 3
