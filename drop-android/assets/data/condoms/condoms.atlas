@@ -1,0 +1,82 @@
+
+condoms.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+condom
+  rotate: false
+  xy: 2, 2
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: 1
+condom
+  rotate: false
+  xy: 68, 3
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+condom
+  rotate: false
+  xy: 134, 3
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+condom
+  rotate: false
+  xy: 200, 4
+  size: 64, 63
+  orig: 64, 63
+  offset: 0, 0
+  index: 4
+condom
+  rotate: false
+  xy: 266, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 5
+condom
+  rotate: false
+  xy: 332, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 6
+condom
+  rotate: false
+  xy: 398, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 7
+condom
+  rotate: false
+  xy: 464, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 8
+condom
+  rotate: false
+  xy: 530, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 9
+condom
+  rotate: false
+  xy: 596, 5
+  size: 64, 62
+  orig: 64, 62
+  offset: 0, 0
+  index: 10
+condom
+  rotate: false
+  xy: 662, 6
+  size: 64, 61
+  orig: 64, 61
+  offset: 0, 0
+  index: 11
