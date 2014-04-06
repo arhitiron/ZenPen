@@ -21,6 +21,7 @@ public class Game implements ApplicationListener {
 	private Vector3 touchPos;
 	private Array<Condom> condoms;
 	private Array<Sperm> sperms;
+	private Array<Bonus> bonuses;
 	private long lastDropTime;
 	private Textures textures;
 
@@ -54,6 +55,7 @@ public class Game implements ApplicationListener {
 	private void initCollections() {
 		setCondoms(new Array<Condom>());
 		setSperms(new Array<Sperm>());
+		setBonuses(new Array<Bonus>());
 	}
 
 	@Override
@@ -70,6 +72,20 @@ public class Game implements ApplicationListener {
 		getCamera().update();
 		getBatch().setProjectionMatrix(getCamera().combined);
 
+		renderGameObjects();
+		updateGameObjects();
+
+		spawnCondom();
+	}
+
+	private void updateGameObjects() {
+		getPenis().update();
+		updateCondoms();
+		updateSperms();
+		updateBonuses();
+	}
+
+	private void renderGameObjects() {
 		getBatch().begin();
 		getPenis().render(getBatch());
 		for (Condom condom : getCondoms()) {
@@ -78,27 +94,31 @@ public class Game implements ApplicationListener {
 		for (Sperm sperm : getSperms()) {
 			sperm.render(getBatch());
 		}
+		for (Bonus bonus : getBonuses()) {
+			bonus.render(getBatch());
+		}
 		getBatch().end();
-
-		getPenis().update();
-
-		spawnCondom();
-
-		updateCondoms();
-		updateSperms();
 	}
 
 	private void updateSperms() {
-		Iterator<Sperm> spermIter = getSperms().iterator();
-		while (spermIter.hasNext()) {
-			Sperm sperm = spermIter.next();
+		Iterator<Sperm> iter = getSperms().iterator();
+		while (iter.hasNext()) {
+			Sperm sperm = iter.next();
 
 			sperm.update();
 
 			if (sperm.getBounds().y + sperm.getBounds().height > 800) {
-				spermIter.remove();
+				iter.remove();
 				continue;
 			}
+		}
+	}
+
+	private void updateBonuses() {
+		Iterator<Bonus> iter = getBonuses().iterator();
+		while (iter.hasNext()) {
+			Bonus bonus = iter.next();
+			bonus.update();
 		}
 	}
 
@@ -123,6 +143,7 @@ public class Game implements ApplicationListener {
 			Iterator<Sperm> spermIter = getSperms().iterator();
 			while (spermIter.hasNext()) {
 				Sperm sperm = spermIter.next();
+
 				if (sperm.getBounds().overlaps(condom.getBounds())) {
 					if (!condom.isUnpacked()) {
 						if (!condom.isPack()) {
@@ -265,5 +286,13 @@ public class Game implements ApplicationListener {
 
 	public void setTextures(Textures textures) {
 		this.textures = textures;
+	}
+
+	public Array<Bonus> getBonuses() {
+		return bonuses;
+	}
+
+	public void setBonuses(Array<Bonus> bonuses) {
+		this.bonuses = bonuses;
 	}
 }
